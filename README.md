@@ -4,11 +4,6 @@
 
 <strong><h2 align="center">DirtyMike</h2></strong> 
 
-<p align="center">  
-
-
-
-</p> 
 
 Fully automated &amp; remotely deployable build & control setup for Monero (XMR) pool mining. 
 
@@ -27,7 +22,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 - ✅ Will only use free CPU power e.g. parallel gaming is possible
 
 ## Requirements
-- A XMR wallet adress
+- A XMR wallet adrress
 - low-level PC, or remote host with rest CPU power
 - Ubuntu 20.04 (tested) or debian OS
 

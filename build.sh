@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=YOUR_WALLET_ADRESS
+wallet=YOUR_WALLET_ADRRESS
 # installation directory (DONT change)
 DIR=$HOME/c3pool
 # remote build via IP
