@@ -16,7 +16,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 
 ## Features    
 - ✅ Nasty installations automated
-- ✅ Super quick remote deploy template file with 
+- ✅ Super quick deploy template file that can trigger arbitrary amount of servers to mine simultaneously
 - ✅ Mining yields are directly auto-transferred to your personal wallet
 - ✅ Lean back script
 - ✅ Automatic benchmark is performed on hardware to evaluate best ALGO (see [here](https://xmrig.com/docs/algorithms))
@@ -88,3 +88,10 @@ Remote is triggered using the `-r` flag. The user is then asked to enter hostnam
 > Password: ...
 ```
 `Note:` If run on servers where the process should be kept alive, please set the detatch in the build.sh to `true`.
+Repeat this with every host you want!
+
+### 6. Monitoring
+Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet address to monitor all servers (workers) which mine to your wallet!
+
+
+### Congratulations you have just started your own miner.
