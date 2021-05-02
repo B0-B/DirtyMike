@@ -2,7 +2,7 @@
 <img width="200" height="200" src="mike.png"/>
 </p>
 
-<strong><h2 style="text-align:center">DirtyMike</h2></strong>
+<strong><h2 align="center">DirtyMike</h2></strong>
 
 Fully automated &amp; remotely deployable build & control setup for Monero (XMR) pool mining.
 
