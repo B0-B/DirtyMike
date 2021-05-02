@@ -17,7 +17,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 ## Features    
 - ✅ Nasty installations automated
 - ✅ Super quick remote deploy template file with 
-- ✅ Mining yields are directly auto-ransferred to your personal wallet
+- ✅ Mining yields are directly auto-transferred to your personal wallet
 - ✅ Lean back script
 - ✅ Automatic benchmark is performed on hardware to evaluate best ALGO (see [here](https://xmrig.com/docs/algorithms))
 - ✅ Direct remote execution
@@ -31,7 +31,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 - low-level PC, or remote host with rest CPU power
 - Ubuntu 20.04 (tested) or debian OS
 
-<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU although the miner was designed to run optimally on x64architecture (strongly recommended). 
+<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU although the miner was designed to run optimally on x64 architecture (strongly recommended). 
 
 ## Dependencies
 The `build.sh` script will automatically install:
