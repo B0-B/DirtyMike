@@ -139,6 +139,7 @@ function build () {
         daemon
     else
         runMiner
+    fi
 }
 
 
