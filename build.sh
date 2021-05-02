@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
+wallet=YOUR_WALLET_ADRESS
 # installation directory (DONT change)
 DIR=$HOME/c3pool
 # remote build via IP
@@ -31,7 +31,6 @@ DIR=$HOME/c3pool
 # each random period of time. These bounds will be applied to each virtual CPU thread.
 CPU_min_lim=55
 CPU_max_lim=85
-
 ###############################################################################################################################
 
 
@@ -106,6 +105,8 @@ function refresh () {
     sudo systemctl reset-failed
 }
 function build () {
+    killAll       
+    wait 
     install && removeService
     wait
     shuffle &
