@@ -29,8 +29,8 @@ DIR=$HOME/c3pool
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
 # CPU range for shuffling, will alter the allowed CPU usage for the miner randomly sampled between min and max value (0-100%) 
 # each random period of time. These bounds will be applied to each virtual CPU thread.
-CPU_min_lim=55
-CPU_max_lim=85
+CPU_min_lim=50
+CPU_max_lim=75
 # Daemon: service which ensures to restart the miner if it terminates for any reason
 daemon_active=true
 ###############################################################################################################################
