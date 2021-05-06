@@ -17,7 +17,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 - ✅ Automatic benchmark is performed on hardware to evaluate best ALGO (see [here](https://xmrig.com/docs/algorithms))
 - ✅ Direct remote execution
 - ✅ Detatched mode for remote hosts (ssh does not need to stay alive)
-- ✅ Works perfectly on low level PCs - needs only 1 CPU thread and ~1GB of RAM
+- ✅ Works perfectly on low level PCs - needs only 1 CPU thread and ~4GB (recommended) of RAM
 - ✅ Taylored to run on VMs especially on scalable droplets, cronjobs etc.
 - ✅ Will only use free CPU power e.g. parallel gaming is possible
 
@@ -71,7 +71,8 @@ Run DirtyMike locally in the root directory
 ```bash
 ~/DirtyMike$ . build.sh
 ```
-The script will ask a few times to enter your password. When you see the Miner in the terminal you are good.
+The script will ask a few times to enter your password. When you see the miner running benchmarks in the terminal, you should be fine.
+`Note :` If this is the first time calling 
 
 ### 5. Deploy Remotely
 Remote is triggered using the `-r` flag. The user is then asked to enter hostname and login credentials
@@ -83,10 +84,11 @@ Remote is triggered using the `-r` flag. The user is then asked to enter hostnam
 > Password: ...
 ```
 `Note:` If run on servers where the process should be kept alive, please set the detatch in the build.sh to `true`.
-Repeat this with every host you want!
+Repeat this with arbitrary hosts.
 
 ### 6. Monitoring
 Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet address to monitor all servers (workers) which mine to your wallet!
 
 
 ### Congratulations you have just started your own miner.
+

