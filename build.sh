@@ -22,8 +22,9 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=19999
 # your wallet public address
-wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
+wallet=YOUR_WALLET_ADDRESS
 # installation directory (DONT change)
+InstDIR=$HOME
 DIR=$HOME/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -154,7 +155,6 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
-ExecStartPre=shuffle
 ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
 Restart=always
 Nice=8
@@ -170,7 +170,8 @@ EOL
     log "miner will start shortly ..."
 }
 function build () {
-    if [[ $(miner_instance_running) == true ]];then
+    # kill existing miner instance
+    if [[ "$(miner_instance_running)" == "true" ]];then
         echo 'found running miner instance ...'
         killAll       
         wait
@@ -187,7 +188,7 @@ function build () {
 }
 
 
-# interpret
+# ----------------- interpret --------------------
 mode=$1;
 if [[ "$mode" == "-r" ]]; then # draw host credentials
     log "$USER deploying build remotely at $IP ..."
@@ -200,6 +201,10 @@ if [[ "$mode" == "-r" ]]; then # draw host credentials
     fi
 elif [[ "$mode" == "-k" ]]; then
     killAll
+elif [ "$mode" == "-k -r" ] || [ "$mode" == "-r -k" ];then
+    log 'remote KILL 🔪'
+    echo "Hostname: ";read IP;echo "Login: ";read USER
+    ssh $USER@$IP ". $InstDIR/build.sh -k"
 elif [[ "$mode" == "-u" ]]; then
     uninstall
 else
