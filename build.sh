@@ -20,7 +20,7 @@ echo '
 #     33333: 15000 diff (SSL)
 #     43333: 2G diff (ETH port)
 #     53333: 2G diff (ETH port/SSL/TLS)
-poolPort=19999
+poolPort=17777
 # your wallet public address
 wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
 # installation directory (DONT change)
