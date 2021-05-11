@@ -22,7 +22,7 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
+wallet=YOUR_WALLET_ADDRESS
 # installation directory (DONT change)
 InstDIR=$HOME
 DIR=$HOME/c3pool
