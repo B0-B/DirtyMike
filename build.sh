@@ -24,8 +24,8 @@ poolPort=17777
 # your wallet public address
 wallet=YOUR_WALLET_ADDRESS
 # installation directory (DONT change)
-InstDIR=$HOME
-DIR=$HOME/c3pool
+InstDIR=/home
+DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
 # CPU range for shuffling, will alter the allowed CPU usage for the miner randomly sampled between min and max value (0-100%) 
@@ -119,7 +119,8 @@ function install () {
     if [ ! -d "$DIR" ]; then
         log 'installing XMR mining setup ... [FFA]'
         sudo apt update &&
-        sudo apt install -y curl && sudo apt install -y cpulimit
+        sudo apt install -y curl && sudo apt install -y cpulimit &&
+        sudo apt-get install -y sysstat
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
         wait 
         setPort
@@ -129,21 +130,22 @@ function install () {
     fi   
 }
 function uninstall () {
-    echo 'uninstalling DirtyMike ...'
+    log 'uninstalling DirtyMike ...'
     echo 'uninstall on remote host? (y/n)'; read input
     if [[ "$input" == "y" ]]; then
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        ssh $USER@$IP "rm -r $DIR"
+        ssh $USER@$IP "rm -r $DIR; rm $InstDIR/build.sh"
     else
         if [ ! -d "$DIR" ]; then
             echo '[DirtyMike]: no miner installation found on this host.';
         else
-            rm -r $DIR
+            rm -r $DIR; rm $InstDIR/build.sh
             sleep 1; clear;
             center 'Thanks for the F-shack! DirtyMike and the Boyz 😙'
             sleep 5; clear
         fi
     fi
+    log 'done.'
 }
 function refresh () {
     sudo systemctl daemon-reload
@@ -153,9 +155,11 @@ function getCPUusage () {
     echo "CPU usage on remote Host? (y/n)";read remote;
     if [[ "$remote" == "y" ]]; then
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        echo CPU usage $(ssh $USER@$IP grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}')
+        echo $(ssh $USER@$IP awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) "%"; }' \
+        <(grep 'cpu ' /proc/stat) <(sleep .1;grep 'cpu ' /proc/stat))
     else
-        echo $(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}')
+        echo $(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) "%"; }' \
+        <(grep 'cpu ' /proc/stat) <(sleep .1;grep 'cpu ' /proc/stat))
     fi
 }
 function daemon () {
@@ -224,9 +228,9 @@ if [[ "$mode" == "-r" ]]; then # draw host credentials
     log "$USER deploying build remotely at $IP ..."
     scp -r ./* $USER@$IP:/home && \
     if [[ $detatched == true ]]; then
-        ssh $USER@$IP "cd /home; setsid -f bash build.sh > /dev/null 2>&1"
+        ssh $USER@$IP "setsid -f bash $InstDIR/build.sh > /dev/null 2>&1"
     else
-        cat ./build.sh | ssh $USER@$IP /bin/bash
+        cat $InstDIR/build.sh | ssh $USER@$IP /bin/bash
     fi
     log "$IP will start to mine soon!"
 elif [[ "$mode" == "-k" ]]; then
