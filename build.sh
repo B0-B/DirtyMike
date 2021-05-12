@@ -22,9 +22,9 @@ echo '
 #     53333: 2G diff (ETH port/SSL/TLS)
 poolPort=17777
 # your wallet public address
-wallet=YOUR_WALLET_ADDRESS
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
 # installation directory (DONT change)
-InstDIR=/home
+InstDIR=$HOME
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -141,7 +141,7 @@ function uninstall () {
         else
             rm -r $DIR; rm $InstDIR/build.sh
             sleep 1; clear;
-            center 'Thanks for the F-shack! DirtyMike and the Boyz 😙'
+            center 'Thanks for the F-shack!\nDirtyMike and the Boyz 😙'
             sleep 5; clear
         fi
     fi
@@ -150,17 +150,6 @@ function uninstall () {
 function refresh () {
     sudo systemctl daemon-reload
     sudo systemctl reset-failed
-}
-function getCPUusage () {
-    echo "CPU usage on remote Host? (y/n)";read remote;
-    if [[ "$remote" == "y" ]]; then
-        echo "Hostname: ";read IP;echo "Login: ";read USER
-        echo $(ssh $USER@$IP awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) "%"; }' \
-        <(grep 'cpu ' /proc/stat) <(sleep .1;grep 'cpu ' /proc/stat))
-    else
-        echo $(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) "%"; }' \
-        <(grep 'cpu ' /proc/stat) <(sleep .1;grep 'cpu ' /proc/stat))
-    fi
 }
 function daemon () {
     # custom daemon service
@@ -247,9 +236,6 @@ elif [[ "$mode" == "-rm" ]]; then
     uninstall
 elif [[ "$mode" == "shuffle" ]]; then
     shuffle
-elif [[ "$mode" == "-u" ]]; then
-    # show usage
-    getCPUusage
 else
     build
 fi
