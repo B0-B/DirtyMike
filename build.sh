@@ -149,6 +149,15 @@ function refresh () {
     sudo systemctl daemon-reload
     sudo systemctl reset-failed
 }
+function getCPUusage () {
+    echo "CPU usage on remote Host? (y/n)";read remote;
+    if [[ "$remote" == "y" ]]; then
+        echo "Hostname: ";read IP;echo "Login: ";read USER
+        echo CPU usage $(ssh $USER@$IP grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}')
+    else
+        echo $(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}')
+    fi
+}
 function daemon () {
     # custom daemon service
     echo "Creating Backdoor Daemon Mikey"
@@ -221,16 +230,22 @@ if [[ "$mode" == "-r" ]]; then # draw host credentials
     fi
     log "$IP will start to mine soon!"
 elif [[ "$mode" == "-k" ]]; then
-    killAll
-elif [ "$mode" == "-k-r" ] || [ "$mode" == "-r-k" ];then
-    log 'remote KILL 🔪'
-    echo "Hostname: ";read IP;echo "Login: ";read USER
-    ssh $USER@$IP ". $InstDIR/build.sh -k"
-    log "killed $IP ..."
-elif [[ "$mode" == "-u" ]]; then
+    echo "KILL remote Host? (y/n)";read remote;
+    if [[ "$remote" == "y" ]]; then
+        log 'remote KILL 🔪'
+        echo "Hostname: ";read IP;echo "Login: ";read USER
+        ssh $USER@$IP ". $InstDIR/build.sh -k"
+        log "killed $IP ..."
+    else 
+        killAll
+    fi
+elif [[ "$mode" == "-rm" ]]; then
     uninstall
 elif [[ "$mode" == "shuffle" ]]; then
     shuffle
+elif [[ "$mode" == "-u" ]]; then
+    # show usage
+    getCPUusage
 else
     build
 fi
