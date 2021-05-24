@@ -89,13 +89,14 @@ function shuffle () {
     do echo "shuffle CPU limit ...";
     lim=`echo $(shuf -i$CPU_min_lim-$CPU_max_lim -n1)`;
     threads=`echo $(grep -c ^processor /proc/cpuinfo)`;
-    log "[CPU threads]:" $threads
+    log "[CPU threads]: $threads virtual cores" 
     log "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
     log "upper limit $(($threads*$lim))";
     cpulimit -e xmrig -l $(($threads*$lim)) & # 2 t/c
     sleep $(shuf -i15-45 -n1);
     pkill cpulimit; 
-    sleep 1; done
+    sleep 1; 
+    done
 }
 function runMiner () {
     . $DIR/miner.sh;
