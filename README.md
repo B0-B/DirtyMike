@@ -3,7 +3,10 @@
 </p>
 
 <strong><h2 align="center">DirtyMike</h2></strong> 
+<h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/pull.sh | bash</h3>
 
+<br>
+<br>
 
 Fully automated &amp; remotely deployable build & control setup for Monero (XMR) pool mining. 
 
@@ -39,8 +42,12 @@ The `build.sh` script will automatically install:
 
 ## Getting Started
 ### 1. Wallet
-First get a valid wallet address. If a wallet does not exist yet it can be generated quickly. For this download the official wallet software from [getmonero.org](https://www.getmonero.org/downloads/) and simply follow the procedure.
-### 2. Get DirtyMike
+First get a valid wallet address. If a wallet does not exist yet it can be generated quickly. For this download the official wallet software from [getmonero.org](https://www.getmonero.org/downloads/) and simply follow the instructions.
+### 2. Install DirtyMike (Ubuntu/Debian)
+```bash
+wget -O - https://b0-b.github.io/DirtyMike/pull.sh | bash
+```
+or
 ```bash
 $ git clone https://github.com/B0-B/DirtyMike.git
 $ cd ./DirtyMike
