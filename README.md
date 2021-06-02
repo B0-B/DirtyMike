@@ -106,7 +106,7 @@ Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet address to moni
 
 <br>
 
-## Deploy Variants 
+## Deploy Variants 📡
 Every method will ask for remote or local option.
 ### Simple remote deploy
 ```bash
