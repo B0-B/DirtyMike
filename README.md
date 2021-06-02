@@ -83,7 +83,7 @@ Run DirtyMike locally in the root directory
 ```bash
 ~/DirtyMike$ . build.sh
 ```
-The script will ask a few times to enter your password. When you see the miner running benchmarks in the terminal, you should be fine.
+The script will ask a few times to enter your password for installation. When you see the miner running benchmarks in the terminal, you should be fine.
 `Note :` If this is the first time calling 
 
 ### 5. Deploy Remotely
