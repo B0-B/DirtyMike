@@ -9,20 +9,19 @@ echo '
 
 ###################################################### PARAMETERS #############################################################
 # Pool support many ports that are only different by their starting difficulty. Please select them based on your miner speed:
-#     80: 1000 diff (Firewall bypass)
-#     443: 1000 diff (Firewall bypass)
-#     13333: 25000 diff (auto-adjust)
-#     14444: 25000 diff (auto-adjust)
-#     15555: 50000 diff (auto-adjust)
-#     17777: 50000 diff (auto-adjust)
-#     19999: 100000 diff (auto-adjust)
-#     23333: 1000000 diff (Proxy/NiceHash)
-#     33333: 15000 diff (SSL)
-#     43333: 2G diff (ETH port)
-#     53333: 2G diff (ETH port/SSL/TLS)
-poolPort=17777
+poolPort=17777  #     80: 1000 diff (Firewall bypass)
+                #     443: 1000 diff (Firewall bypass)
+                #     13333: 25000 diff (auto-adjust)
+                #     14444: 25000 diff (auto-adjust)
+                #     15555: 50000 diff (auto-adjust)
+                #     17777: 50000 diff (auto-adjust)
+                #     19999: 100000 diff (auto-adjust)
+                #     23333: 1000000 diff (Proxy/NiceHash)
+                #     33333: 15000 diff (SSL)
+                #     43333: 2G diff (ETH port)
+                #     53333: 2G diff (ETH port/SSL/TLS)
 # your wallet public address
-wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W
+wallet=4256HG8... # place it HERE!
 # installation directory (DONT change)
 InstDIR=$HOME
 DIR=$InstDIR/c3pool
@@ -178,7 +177,7 @@ EOL
   [Unit]
 Description=Shuffle
 [Service]
-ExecStart=$HOME/build.sh shuffle
+ExecStart=$HOME/build.sh -s
 Restart=always
 Nice=8
 CPUWeight=1
@@ -235,7 +234,7 @@ elif [[ "$mode" == "-k" ]]; then
     fi
 elif [[ "$mode" == "-rm" ]]; then
     uninstall
-elif [[ "$mode" == "shuffle" ]]; then
+elif [[ "$mode" == "-s" ]]; then
     shuffle
 else
     build

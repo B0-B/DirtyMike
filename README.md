@@ -49,11 +49,23 @@ $ cd ./DirtyMike
 Open `build.sh` to alter the config parameters. Exchange your wallet address (mandatory) all other parameters are fine on default for now.
 ```bash
 # ...
-poolPort=17777
+# Pool support many ports that are only different by their starting difficulty. Please select them based on your miner speed:
+poolPort=17777  #     80: 1000 diff (Firewall bypass)
+                #     443: 1000 diff (Firewall bypass)
+                #     13333: 25000 diff (auto-adjust)
+                #     14444: 25000 diff (auto-adjust)
+                #     15555: 50000 diff (auto-adjust)
+                #     17777: 50000 diff (auto-adjust)
+                #     19999: 100000 diff (auto-adjust)
+                #     23333: 1000000 diff (Proxy/NiceHash)
+                #     33333: 15000 diff (SSL)
+                #     43333: 2G diff (ETH port)
+                #     53333: 2G diff (ETH port/SSL/TLS)
 # your wallet public address
-wallet=YOUR_WALLET_ADRESS ⬅️
+wallet=4256HG8... # place it HERE!
 # installation directory (DONT change)
-DIR=$HOME/c3pool
+InstDIR=$HOME
+DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
 # CPU range for shuffling, will alter the allowed CPU usage for the miner randomly sampled between min and max value (0-100%) 
@@ -92,3 +104,30 @@ Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet address to moni
 
 ### Congratulations you have just started your own miner.
 
+<br>
+
+## Deploy Variants 
+Every method will ask for remote or local option.
+### Simple remote deploy
+```bash
+. build.sh -r
+```
+
+### Kill Worker 
+```bash
+. build.sh -k
+```
+
+### Remove/Uninstall 
+```bash
+. build.sh -rm
+```
+
+### Shuffler (only)
+This will run automatically. 
+```bash
+. build.sh -s
+```
+
+## Issues
+Daemon is not working yet. Please keep the parameter on false for now.
