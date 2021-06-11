@@ -52,6 +52,7 @@ function killAll () {
     sed -i '/c3pool/d' $HOME/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
+    systemctl stop c3pool_miner.service
     sudo systemctl shuffle.service  
     log 'killed all services.'
 }
