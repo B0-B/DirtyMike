@@ -49,7 +49,7 @@ function center () {
 }
 function killAll () {
     killall -9 cpulimit
-    sed -i '/c3pool/d' $HOME/.profile;
+    sed -i '/c3pool/d' $InstDIR/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
     systemctl stop c3pool_miner.service
