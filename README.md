@@ -137,4 +137,3 @@ This will run automatically.
 ```
 
 ## Issues
-Daemon is not working yet. Please keep the parameter on false for now.

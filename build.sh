@@ -34,7 +34,7 @@ CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
 daemon_active=false
 # Detatched
-detatched=true
+detatched=false
 ###############################################################################################################################
 
 
@@ -52,8 +52,13 @@ function killAll () {
     sed -i '/c3pool/d' $HOME/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
+<<<<<<< HEAD
     systemctl stop c3pool_miner.service
     sudo systemctl shuffle.service  
+=======
+    sudo systemctl stop c3pool_miner.service
+    sudo systemctl stop shuffle.service  
+>>>>>>> 8855c5a9c19513931fbc02f68b0e05aa30f02ed0
     log 'killed all services.'
 }
 function stopService () {
@@ -70,6 +75,29 @@ function removeService () {
         sudo systemctl reset-failed
     fi
 }
+
+function systemdc () {
+    
+	echo "cleanup systemd"
+	sudo systemctl stop c3pool_miner.service
+    sudo systemctl disable c3pool_miner.service
+    sudo rm -f /etc/systemd/system/c3pool_miner.service
+    echo "c3pool_service removed"
+	sudo systemctl stop Backdoor_Mikey.service
+    sudo systemctl disable Backdoor_Mikey.service
+    sudo rm -f /etc/systemd/system/Backdoor_Mikey.service
+	echo "Backdoor_Mikey_service removed"
+	sudo systemctl stop shuffle.service
+    sudo systemctl disable shuffle.service
+    sudo rm -f /etc/systemd/system/shuffle.service
+	echo "Shuffling_Service removed"
+    sudo systemctl daemon-reload
+    sudo systemctl reset-failed
+    echo "...Terminus..."
+
+} 
+
+
 function CPU_threads () {
     # echo $(cpuThreads)
     grep -c ^processor /proc/cpuinfo
@@ -135,12 +163,13 @@ function uninstall () {
     echo 'uninstall on remote host? (y/n)'; read input
     if [[ "$input" == "y" ]]; then
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        ssh $USER@$IP "rm -r $DIR; rm $InstDIR/build.sh"
+        ssh $USER@$IP "$(typeset -f systemdc); systemdc; rm -rf $DIR; rm $InstDIR/build.sh"
     else
         if [ ! -d "$DIR" ]; then
             echo '[DirtyMike]: no miner installation found on this host.';
         else
-            rm -r $DIR; rm $InstDIR/build.sh
+            systemdc
+            rm -rf $DIR; rm $InstDIR/build.sh
             sleep 1; clear;
             center 'Thanks for the F-shack!\nDirtyMike and the Boyz 😙'
             sleep 5; clear
@@ -168,7 +197,6 @@ WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
     log "..... Mikey daemon is here ....."
-    sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
 
@@ -178,7 +206,7 @@ EOL
   [Unit]
 Description=Shuffle
 [Service]
-ExecStart=$HOME/build.sh -s
+ExecStart=/bin/bash $HOME/build.sh -s
 Restart=always
 Nice=8
 CPUWeight=1
@@ -187,9 +215,9 @@ WantedBy=multi-user.target
 EOL
     sudo mv /tmp/shuffle.service /etc/systemd/system/shuffle.service
     log "shuffle service initiated ..."
-    sudo systemctl daemon-reload
     sudo systemctl enable shuffle.service
     sudo systemctl start shuffle.service
+    sudo systemctl reset-failed
     log "miner will start shortly ..."
 }
 function build () {
@@ -234,7 +262,7 @@ elif [[ "$mode" == "-k" ]]; then
         killAll
     fi
 elif [[ "$mode" == "-rm" ]]; then
-    uninstall
+    uninstall  
 elif [[ "$mode" == "-s" ]]; then
     shuffle
 else
