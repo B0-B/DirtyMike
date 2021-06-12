@@ -34,7 +34,7 @@ CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
 daemon_active=true
 # Detatched
-detatched=false
+detatched=true
 ###############################################################################################################################
 
 
@@ -148,6 +148,7 @@ function install () {
         sudo apt install -y curl && sudo apt install -y cpulimit &&
         sudo apt-get install -y sysstat
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
+        mv $HOME/c3pool /etc
         wait 
         setPort
         removeService && killAll
@@ -243,9 +244,9 @@ if [[ "$mode" == "-r" ]]; then # draw host credentials
     log "$USER deploying build remotely at $IP ..."
     scp -r ./* $USER@$IP:$InstDIR && \
     if [[ $detatched == true ]]; then
-        ssh $USER@$IP "setsid -f bash $InstDIR/build.sh > /dev/null 2>&1"
+        ssh $USER@$IP "setsid -f bash "$InstDIR"/build.sh > /dev/null 2>&1"
     else
-        cat $InstDIR/build.sh | ssh $USER@$IP /bin/bash
+        ssh $USER@$IP /bin/bash $InstDIR/build.sh
     fi
     log "$IP will start to mine soon!"
 elif [[ "$mode" == "-k" ]]; then
@@ -253,7 +254,7 @@ elif [[ "$mode" == "-k" ]]; then
     if [[ "$remote" == "y" ]]; then
         log 'remote KILL 🔪'
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        ssh $USER@$IP ". $InstDIR/build.sh -k"
+        ssh $USER@$IP ". "$InstDIR"/build.sh -k"
         log "killed $IP ..."
     else 
         killAll
