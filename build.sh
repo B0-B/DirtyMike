@@ -32,7 +32,7 @@ DIR=$InstDIR/c3pool
 CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=false
+daemon_active=true
 # Detatched
 detatched=false
 ###############################################################################################################################
@@ -185,7 +185,7 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
-ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
+ExecStart=$InstDIR/c3pool/xmrig --config=$InstDIR/c3pool/config.json
 Restart=always
 Nice=8
 CPUWeight=1
@@ -203,7 +203,7 @@ EOL
   [Unit]
 Description=Shuffle
 [Service]
-ExecStart=/bin/bash $HOME/build.sh -s
+ExecStart=/bin/bash $InstDIR/build.sh -s
 Restart=always
 Nice=8
 CPUWeight=1
@@ -241,7 +241,7 @@ mode=$1$2;
 if [[ "$mode" == "-r" ]]; then # draw host credentials
     echo "Hostname: ";read IP;echo "Login: ";read USER
     log "$USER deploying build remotely at $IP ..."
-    scp -r ./* $USER@$IP:/home && \
+    scp -r ./* $USER@$IP:$InstDIR && \
     if [[ $detatched == true ]]; then
         ssh $USER@$IP "setsid -f bash $InstDIR/build.sh > /dev/null 2>&1"
     else
