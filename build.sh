@@ -23,7 +23,7 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
 # your wallet public address
 wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
-InstDIR=$HOME
+InstDIR=/etc
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -142,11 +142,11 @@ function install () {
         sudo apt update &&
         sudo apt install -y curl && sudo apt install -y cpulimit &&
         sudo apt-get install -y sysstat
-        curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
-        mv $HOME/c3pool $InstDIR
+        curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet &&
+        removeService && killAll &&
+        sudo mv $HOME/c3pool $InstDIR
         wait 
         setPort
-        removeService && killAll
     else
         echo installation found at $DIR
     fi   
