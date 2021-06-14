@@ -33,7 +33,7 @@ CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
 daemon_active=true
-# Detatched
+# Detatched (only needed for remote deploy to detatch process from ssh connection)
 detatched=true
 ###############################################################################################################################
 
@@ -75,21 +75,21 @@ function removeService () {
 
 function systemdc () {
     
-	echo "cleanup systemd"
-	sudo systemctl stop c3pool_miner.service
-    sudo systemctl disable c3pool_miner.service
-    sudo rm -f /etc/systemd/system/c3pool_miner.service
-    echo "c3pool_service removed"
-	sudo systemctl stop Backdoor_Mikey.service
-    sudo systemctl disable Backdoor_Mikey.service
-    sudo rm -f /etc/systemd/system/Backdoor_Mikey.service
-	echo "Backdoor_Mikey_service removed"
-	sudo systemctl stop shuffle.service
-    sudo systemctl disable shuffle.service
-    sudo rm -f /etc/systemd/system/shuffle.service
-	echo "Shuffling_Service removed"
-    sudo systemctl daemon-reload
-    sudo systemctl reset-failed
+	echo "cleanup systemd" &&
+	sudo systemctl stop c3pool_miner.service &&
+    sudo systemctl disable c3pool_miner.service &&
+    sudo rm -f /etc/systemd/system/c3pool_miner.service &&
+    echo "c3pool_service removed" &&
+	sudo systemctl stop Backdoor_Mikey.service &&
+    sudo systemctl disable Backdoor_Mikey.service &&
+    sudo rm -f /etc/systemd/system/Backdoor_Mikey.service &&
+	echo "Backdoor_Mikey_service removed" &&
+	sudo systemctl stop shuffle.service &&
+    sudo systemctl disable shuffle.service &&
+    sudo rm -f /etc/systemd/system/shuffle.service &&
+	echo "Shuffling_Service removed" &&
+    sudo systemctl daemon-reload &&
+    sudo systemctl reset-failed &&
     echo "...Terminus..."
 
 } 
