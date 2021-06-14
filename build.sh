@@ -162,7 +162,8 @@ function uninstall () {
             echo '[DirtyMike]: no miner installation found on this host.';
         else
             systemdc
-            rm -rf $DIR; rm $InstDIR/build.sh
+            sudo rm -rf $DIR
+            sudo rm -rf $InstDIR/DirtyMike
             sleep 1; clear;
             center 'Thanks for the F-shack!\nDirtyMike and the Boyz 😙'
             sleep 5; clear
