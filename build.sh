@@ -225,7 +225,7 @@ function build () {
     install  
     # trigger daemon or script directly
     if [[ $watchdog == true ]]; then
-        daemon & shuffler
+        daemon && shuffler
         log "miner will start shortly ..."
     else
         shuffle &
