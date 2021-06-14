@@ -32,7 +32,7 @@ DIR=$InstDIR/c3pool
 CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=true
+watchdog=true
 # Detatched (only needed for remote deploy to detatch process from ssh connection)
 detatched=true
 ###############################################################################################################################
@@ -72,9 +72,7 @@ function removeService () {
         sudo systemctl reset-failed
     fi
 }
-
 function systemdc () {
-    
 	echo "cleanup systemd" &&
 	sudo systemctl stop c3pool_miner.service &&
     sudo systemctl disable c3pool_miner.service &&
@@ -91,10 +89,7 @@ function systemdc () {
     sudo systemctl daemon-reload &&
     sudo systemctl reset-failed &&
     echo "...Terminus..."
-
 } 
-
-
 function CPU_threads () {
     # echo $(cpuThreads)
     grep -c ^processor /proc/cpuinfo
@@ -197,7 +192,8 @@ EOL
     log "..... Mikey daemon is here ....."
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
-
+}
+function shuffler () {
     # SHUFFLE
     log "Creating Shuffling Service"
     cat >/tmp/shuffle.service <<EOL
@@ -228,8 +224,8 @@ function build () {
     # run full installation (if needed)
     install  
     # trigger daemon or script directly
-    if [[ $daemon_active == true ]]; then
-        daemon
+    if [[ $watchdog == true ]]; then
+        daemon & shuffler
     else
         shuffle &
         runMiner
