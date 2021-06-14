@@ -79,7 +79,7 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
                 #     43333: 2G diff (ETH port)
                 #     53333: 2G diff (ETH port/SSL/TLS)
 # your wallet public address
-wallet=4256HG8... # place it HERE!
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
 InstDIR=$HOME
 DIR=$InstDIR/c3pool
@@ -89,9 +89,9 @@ DIR=$InstDIR/c3pool
 # each random period of time. These bounds will be applied to each virtual CPU thread.
 CPU_min_lim=50
 CPU_max_lim=75
-# Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=false
-# Detatched
+# watchdog is a backed system service which monitors that all processes are running properly
+watchdog=true
+# Detatched (only needed for remote deploy to detatch process from ssh connection)
 detatched=true
 # ...
 ```
