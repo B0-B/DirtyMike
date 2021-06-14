@@ -3,5 +3,5 @@ if [ "" = "$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok insta
   sudo apt-get --yes install git 
 fi
 cd /etc
-git clone https://github.com/B0-B/DirtyMike.git &&
+sudo git clone https://github.com/B0-B/DirtyMike.git &&
 xdg-open "/etc/DirtyMike/build.sh"
