@@ -3,7 +3,17 @@
 </p>
 
 <strong><h2 align="center">DirtyMike</h2></strong> 
+
+<br>
+
+<h3 align="center">Quick setup </h3>
 <h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/pull.sh | bash</h3>
+
+
+<br>
+
+<h3 align="center">Setup & Donate Hash Power</h3>
+<h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/donate.sh | bash</h3>
 
 <br>
 <br>
