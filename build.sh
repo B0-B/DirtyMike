@@ -52,8 +52,6 @@ function killAll () {
     sed -i '/c3pool/d' $InstDIR/.profile;
     killall -9 xmrig;
     sudo systemctl stop Backdoor_Mikey.service  
-    systemctl stop c3pool_miner.service
-    sudo systemctl shuffle.service  
     sudo systemctl stop c3pool_miner.service
     sudo systemctl stop shuffle.service  
     log 'killed all services.'
@@ -73,22 +71,18 @@ function removeService () {
     fi
 }
 function systemdc () {
-	echo "cleanup systemd" &&
-	sudo systemctl stop c3pool_miner.service &&
-    sudo systemctl disable c3pool_miner.service &&
-    sudo rm -f /etc/systemd/system/c3pool_miner.service &&
-    echo "c3pool_service removed" &&
+	log "cleanup systemd..." &&
 	sudo systemctl stop Backdoor_Mikey.service &&
     sudo systemctl disable Backdoor_Mikey.service &&
     sudo rm -f /etc/systemd/system/Backdoor_Mikey.service &&
-	echo "Backdoor_Mikey_service removed" &&
+	log "Backdoor_Mikey_service removed" &&
 	sudo systemctl stop shuffle.service &&
     sudo systemctl disable shuffle.service &&
     sudo rm -f /etc/systemd/system/shuffle.service &&
-	echo "Shuffling_Service removed" &&
+	log "Shuffling_Service removed" &&
     sudo systemctl daemon-reload &&
     sudo systemctl reset-failed &&
-    echo "...Terminus..."
+    log "...Terminus..."
 } 
 function CPU_threads () {
     # echo $(cpuThreads)
@@ -212,7 +206,7 @@ EOL
     log "shuffle service initiated ."
     sudo systemctl enable shuffle.service
     sudo systemctl start shuffle.service
-    #sudo systemctl reset-failed
+    sudo systemctl reset-failed
 }
 function build () {
     # kill existing miner instance
