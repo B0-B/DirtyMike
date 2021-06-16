@@ -23,7 +23,7 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
 # your wallet public address
 wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
-InstDIR=/etc
+InstDIR=$HOME
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
