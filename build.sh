@@ -139,6 +139,7 @@ function install () {
         curl -s -L https://raw.githubusercontent.com/C3Pool/xmrig_setup/master/setup_c3pool_miner.sh | bash -s $wallet &&
         removeService && killAll &&
         sudo mv $HOME/c3pool $InstDIR
+        'alias dirtymike="$InstDIR/DirtyMike/build.sh"' >> $InstDIR/.bashrc
         wait 
         setPort
     else
@@ -158,6 +159,7 @@ function uninstall () {
             systemdc
             sudo rm -rf $DIR
             sudo rm -rf $InstDIR/DirtyMike
+            sed '/dirtymike/d' $InstDIR/.bashrc
             sleep 1; clear;
             center 'Thanks for the F-shack!\nDirtyMike and the Boyz 😙'
             sleep 5; clear
