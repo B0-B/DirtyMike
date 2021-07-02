@@ -23,19 +23,20 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 
 ## Features    
 - ✅ Nasty installations automated
-- ✅ Super quick deploy template file that can trigger arbitrary amount of servers to mine simultaneously
-- ✅ Mining yields are directly auto-transferred to your personal wallet
-- ✅ Lean back script
-- ✅ Automatic benchmark is performed on hardware to evaluate best ALGO (see [here](https://xmrig.com/docs/algorithms))
-- ✅ Direct remote execution
-- ✅ Detatched mode for remote hosts (ssh does not need to stay alive)
-- ✅ Works perfectly on low level PCs - needs only 1 CPU thread and ~4GB (recommended) of RAM
-- ✅ Taylored to run on VMs especially on scalable droplets, cronjobs etc.
-- ✅ Will only use free CPU power e.g. parallel gaming is possible
+- ✅ Dirty packages are removed no trash legacies
+- ✅ Super quick deploy command that can trigger any arbitrary amount of servers to <strong>mine</strong> 
+- ✅ Mining yields are transferred <strong>directly to provided wallet</strong> (min. 0.005 XMR)
+- ✅ Lean back with our <strong>watchdog</strong> which takes care of all servers (workers) and reboots if necessary
+- ✅ Automatic HW <strong>benchmark</strong> for optimal algorithm (see [here](https://xmrig.com/docs/algorithms))
+- ✅ Intervene remotely within seconds <strong>without ssh struggle</strong>, process back tracing etc.
+- ✅ Detatched mode for remote hosts (no ssh connection needed)
+- ✅ Works perfectly on low performance PCs - needs at least 2 CPU threads and ~4GB RAM (recommended)
+- ✅ Designed to be <strong>scalable</strong>
+- ✅ Will available (free) CPU power only
 
 ## Requirements
-- A XMR wallet adrress
-- low-level PC, or remote host with rest CPU power
+- XMR wallet
+- PC, or remote host with rest CPU power and ~4GB RAM
 - Ubuntu 20.04 (tested) or debian OS
 
 <strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU although the miner was designed to run optimally on x64 architecture (strongly recommended). 
