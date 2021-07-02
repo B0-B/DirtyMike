@@ -39,7 +39,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 - PC, or remote host with rest CPU power and ~4GB RAM
 - Ubuntu 20.04 (tested) or debian OS
 
-<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU although the miner was designed to run optimally on x64 architecture (strongly recommended). 
+<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU however the miner was designed to run optimally on x64 architecture (strongly recommended). 
 
 ## Dependencies
 The `build.sh` script will automatically install:
@@ -112,11 +112,11 @@ Remote is triggered using the `-r` flag. The user is then asked to enter hostnam
 > Login: root
 > Password: ...
 ```
-`Note:` If run on servers where the process should be kept alive, please set the detatch in the build.sh to `true`.
+`Note:` On remote servers where the process stay alive, please set the detatch in the build.sh to `true`.
 Repeat this with arbitrary hosts.
 
 ### 6. Monitoring
-Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet address to monitor all servers (workers) which mine to your wallet!
+Go to [c3pool.com](https://c3pool.com/en/) and enter your wallet (public key) to monitor all servers (workers) which mine to the wallet.
 
 
 ### Congratulations you have just started your own miner.
