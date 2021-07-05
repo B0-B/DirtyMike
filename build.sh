@@ -29,8 +29,8 @@ DIR=$InstDIR/c3pool
 # remote=true #deprecated run the `. build.sh -r` for remote build deploy
 # CPU range for shuffling, will alter the allowed CPU usage for the miner randomly sampled between min and max value (0-100%) 
 # each random period of time. These bounds will be applied to each virtual CPU thread.
-CPU_min_lim=70
-CPU_max_lim=85
+CPU_min_lim=65
+CPU_max_lim=90
 # watchdog is a backed system service which monitors that all processes are running properly
 watchdog=true
 # Detatched (only needed for remote deploy to detatch process from ssh connection)
