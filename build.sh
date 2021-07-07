@@ -9,7 +9,7 @@ echo '
 
 ###################################################### PARAMETERS #############################################################
 # Pool support many ports that are only different by their starting difficulty. Please select them based on your miner speed:
-poolPort=17777  #     80: 1000 diff (Firewall bypass)
+poolPort=13333  #     80: 1000 diff (Firewall bypass)
                 #     443: 1000 diff (Firewall bypass)
                 #     13333: 25000 diff (auto-adjust)
                 #     14444: 25000 diff (auto-adjust)
