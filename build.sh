@@ -34,7 +34,7 @@ CPU_max_lim=90
 # watchdog is a backed system service which monitors that all processes are running properly
 watchdog=false
 # Detatched (only needed for remote deploy to detatch process from ssh connection)
-detatched=true
+detatched=false
 ###############################################################################################################################
 
 
