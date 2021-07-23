@@ -2,13 +2,13 @@
 <img height="300" src="DirtyMike.png"/>
 </p>
 
-<strong><h2 align="center">DirtyMike</h2></strong> 
+<strong><h3 align="center">DirtyMike</h3></strong> 
 
 
 
 <br>
 <!-- Badges -->
-<h2 align=center><a name="stealth"><img src="https://img.shields.io/badge/Status-Tested%20Stable-cyan.svg"/></a></h2>
+<h3 align=center><a name="stealth"><img src="https://img.shields.io/badge/Status-Tested%20Stable-cyan.svg"/></a></h3>
 
 <br>
 
