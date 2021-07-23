@@ -2,17 +2,16 @@
 <img height="200" src="DirtyMike.png"/>
 </p>
 
-<br>
 
 <strong><h3 align="center">DirtyMike ✌️</h3></strong> 
 
 
 
-<br>
+
 <!-- Badges -->
 <h3 align=center><a name="stealth"><img src="https://img.shields.io/badge/Status-Tested%20Stable-cyan.svg"/></a></h3>
 
-<br>
+
 
 ---
 <h4 align="center"><strong>Quick Setup</strong></h4>
