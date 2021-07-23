@@ -11,3 +11,6 @@ Create a playground for unconventional solutions, addons and general enhancement
 # 1.1 Stealth Method 
 <a name="stealth"></a>
 An obfuscating C-code from 2011 was optimized and assembled to fit DirtyMike and xmrig. It hides all necessary but unwanted processes from all process queries.
+
+# 1.2 Bootable Flash Drive "BOII" running Ubuntu with DirtyMike
+<a name="BOII"></a>
