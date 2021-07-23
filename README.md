@@ -2,7 +2,9 @@
 <img height="200" src="DirtyMike.png"/>
 </p>
 
-<strong><h3 align="center">DirtyMike</h3></strong> 
+<br>
+
+<strong><h3 align="center">DirtyMike ✌️</h3></strong> 
 
 
 
@@ -13,14 +15,14 @@
 <br>
 
 ---
-<h3 align="center"><strong>Quick Setup</strong></h3>
-<h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/pull.sh | bash</h3>
+<h4 align="center"><strong>Quick Setup</strong></h4>
+<h4 align="center">wget -O - https://b0-b.github.io/DirtyMike/pull.sh | bash</h4>
 
 
 <br>
 
-<h3 align="center"><strong>Setup & Donate Hash Power</strong></h3>
-<h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/donate.sh | bash</h3>
+<h4 align="center"><strong>Setup & Donate Hash Power</strong></h4>
+<h4 align="center">wget -O - https://b0-b.github.io/DirtyMike/donate.sh | bash</h4>
 
 ---
 
@@ -32,7 +34,7 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 ## Features    
 - ✅ Nasty installations automated
 - ✅ Dirty packages are removed no trash legacies
-- ✅ Super quick deploy command that can trigger any arbitrary amount of servers to <strong>mine</strong> 
+- ✅ Fast deploy commands that can trigger any arbitrary amount of servers to <strong>mine</strong> 
 - ✅ Mining yields are transferred <strong>directly to provided wallet</strong> (min. 0.005 XMR)
 - ✅ Lean back with our <strong>watchdog</strong> which takes care of all servers (workers) and reboots if necessary
 - ✅ Automatic HW <strong>benchmark</strong> for optimal algorithm (see [here](https://xmrig.com/docs/algorithms))
@@ -40,14 +42,14 @@ Fully automated &amp; remotely deployable build & control setup for Monero (XMR)
 - ✅ Detatched mode for remote hosts (no ssh connection needed)
 - ✅ Works perfectly on low performance PCs - needs at least 2 CPU threads and ~4GB RAM (recommended)
 - ✅ Designed to be <strong>scalable</strong>
-- ✅ Will available (free) CPU power only
+- ✅ Will utilize unused CPU power only
 
 ## Requirements
 - XMR wallet
 - PC, or remote host with rest CPU power and ~4GB RAM
 - Ubuntu 20.04 (tested) or debian OS
 
-<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU however the miner was designed to run optimally on x64 architecture (strongly recommended). 
+<strong>DirtyMike</strong> can be build on any host with x64/ARMv8 CPU however strongest algos like randomx run optimally on x64 architecture (strongly recommended). 
 
 ## Dependencies
 The `build.sh` script will automatically install:
