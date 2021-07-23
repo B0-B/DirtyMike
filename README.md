@@ -1,8 +1,14 @@
 <p align="center">
-<img width="200" height="200" src="mike.png"/>
+<img height="300" src="DirtyMike.png"/>
 </p>
 
 <strong><h2 align="center">DirtyMike</h2></strong> 
+
+
+
+<br>
+<!-- Badges -->
+<h2 align=center><a name="stealth"><img src="https://img.shields.io/badge/Status-Tested%20Stable-cyan.svg"/></a></h2>
 
 <br>
 
@@ -15,11 +21,11 @@
 <h3 align="center">Setup & Donate Hash Power</h3>
 <h3 align="center">wget -O - https://b0-b.github.io/DirtyMike/donate.sh | bash</h3>
 
+
 <br>
 <br>
 
 Fully automated &amp; remotely deployable build & control setup for Monero (XMR) pool mining. 
-
 
 ## Features    
 - ✅ Nasty installations automated
